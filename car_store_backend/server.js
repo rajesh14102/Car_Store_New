@@ -40,3 +40,14 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
+const { exec } = require('child_process');
+
+// Run Prisma migration at runtime
+exec('npx prisma db push', (err, stdout, stderr) => {
+  if (err) {
+    console.error('❌ Prisma DB Push failed:', stderr);
+  } else {
+    console.log('✅ Prisma DB Push succeeded:', stdout);
+  }
+});
