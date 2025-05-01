@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api/featured';
+// Get base URL from environment variable
+const API_BASE = process.env.REACT_APP_API_BASE_URL + '/api/featured';
 
-// Upload a new featured car (GLB model)
+// ✅ Upload a new featured car (GLB model)
 export const uploadFeaturedCar = async (formData) => {
   try {
     const response = await axios.post(`${API_BASE}/upload`, formData, {
@@ -17,7 +18,7 @@ export const uploadFeaturedCar = async (formData) => {
   }
 };
 
-// Fetch the current featured car
+// ✅ Fetch the current featured car
 export const getFeaturedCar = async () => {
   try {
     const response = await axios.get(`${API_BASE}/get`);

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/products';
+const API_URL = process.env.REACT_APP_API_BASE_URL + '/api/products';
 
-// Get all products
+// ✅ Get all products
 export const getProducts = async () => {
   try {
     return await axios.get(API_URL);
@@ -12,7 +12,7 @@ export const getProducts = async () => {
   }
 };
 
-// Get single product by ID
+// ✅ Get single product by ID
 export const getProductById = async (id) => {
   try {
     return await axios.get(`${API_URL}/${id}`);
@@ -22,7 +22,7 @@ export const getProductById = async (id) => {
   }
 };
 
-// Add new product (multipart/form-data)
+// ✅ Add new product (multipart/form-data)
 export const addProduct = async (formData) => {
   try {
     return await axios.post(API_URL, formData, {
@@ -34,7 +34,7 @@ export const addProduct = async (formData) => {
   }
 };
 
-// Update existing product
+// ✅ Update existing product
 export const updateProduct = async (id, formData) => {
   try {
     return await axios.put(`${API_URL}/${id}`, formData, {
@@ -46,7 +46,7 @@ export const updateProduct = async (id, formData) => {
   }
 };
 
-// Delete product
+// ✅ Delete product
 export const deleteProduct = async (id) => {
   try {
     return await axios.delete(`${API_URL}/${id}`);
