@@ -1,13 +1,16 @@
 const prisma = require('../config/prismaClient');
+const path = require('path');
 
 const uploadFeaturedCar = async (req, res) => {
   try {
-    if (!req.file || !req.file.path) return res.status(400).json({ error: 'No file uploaded' });
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-    const filePath = req.file.path; // ✅ Cloudinary returns full URL
+    const filePath = `/uploads/${req.file.filename}`;
 
+    // Delete existing featured car metadata
     await prisma.featuredCar.deleteMany();
 
+    // Save new one
     await prisma.featuredCar.create({
       data: { modelUrl: filePath },
     });
