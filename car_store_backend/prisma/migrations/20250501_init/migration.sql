@@ -1,4 +1,3 @@
-
 -- Product Table
 CREATE TABLE "Product" (
   "id" SERIAL PRIMARY KEY,
