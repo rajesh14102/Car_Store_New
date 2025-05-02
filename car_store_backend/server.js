@@ -11,32 +11,29 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// --- Global Middlewares ---
 app.use(cors({
   origin: process.env.CORS_ORIGIN || '*',
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- Static File Serving ---
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // For GLB model access
+// ✅ Serve static GLB files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// --- API Routes ---
 app.use('/api/products', productRoutes);
 app.use('/api/featured', featuredRoutes);
 
-// --- 404 Handling ---
+// Error Handling
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// --- Global Error Handler (Optional) ---
 app.use((err, req, res, next) => {
-  console.error('Unexpected Server Error:', err);
-  res.status(500).json({ error: 'Internal Server Error' });
+  console.error('Unexpected Error:', err);
+  res.status(500).json({ error: 'Server Error' });
 });
 
-// --- Start Server ---
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
