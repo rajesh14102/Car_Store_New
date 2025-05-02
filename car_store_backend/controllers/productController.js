@@ -1,10 +1,7 @@
-const prisma = require('../config/prismaClient');
-
-// Add Product
 const addProduct = async (req, res) => {
   try {
     const { name, description, price } = req.body;
-    if (!name || !description || !price || !req.file) {
+    if (!name || !description || !price || !req.file || !req.file.path) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
@@ -13,7 +10,7 @@ const addProduct = async (req, res) => {
         name,
         description,
         price: parseFloat(price),
-        modelUrl: `/uploads/${req.file.filename}`,
+        modelUrl: req.file.path,
       },
     });
 
@@ -24,7 +21,6 @@ const addProduct = async (req, res) => {
   }
 };
 
-// Get All Products
 const getAllProducts = async (req, res) => {
   try {
     const products = await prisma.product.findMany({
@@ -37,7 +33,6 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-// Get Single Product
 const getProductById = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -53,7 +48,6 @@ const getProductById = async (req, res) => {
   }
 };
 
-// Update Product
 const updateProduct = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -63,7 +57,7 @@ const updateProduct = async (req, res) => {
     if (req.body.name) data.name = req.body.name;
     if (req.body.description) data.description = req.body.description;
     if (req.body.price) data.price = parseFloat(req.body.price);
-    if (req.file) data.modelUrl = `/uploads/${req.file.filename}`;
+    if (req.file && req.file.path) data.modelUrl = req.file.path;
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: 'No fields provided for update' });
@@ -81,7 +75,6 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// Delete Product
 const deleteProduct = async (req, res) => {
   try {
     const id = Number(req.params.id);

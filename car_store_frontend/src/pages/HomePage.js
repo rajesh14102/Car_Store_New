@@ -71,7 +71,7 @@ const HomePage = () => {
           mb: 3
         }}
       >
-        At Car Store, we offer a premium selection of high-performance cars, timeless classics, and futuristic designs — 
+        At Car Store, we offer a premium selection of high-performance cars, timeless classics, and futuristic designs —
         all brought to life in immersive 3D. Explore our showroom, experience perfection, and drive your dreams!
       </Typography>
 
@@ -79,7 +79,7 @@ const HomePage = () => {
       {featuredModelUrl && (
         <Box sx={{ width: '100%', height: { xs: 400, sm: 600, md: 700, lg: 800 }, mb: 4 }}>
           <ThreeDViewer
-            modelUrl={`${process.env.REACT_APP_API_BASE_URL}${featuredModelUrl}`}
+            modelUrl={product.modelUrl}
             small={false}
           />
         </Box>
