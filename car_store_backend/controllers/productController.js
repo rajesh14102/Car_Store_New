@@ -1,3 +1,6 @@
+const prisma = require('../config/prismaClient');
+
+// Add Product
 const addProduct = async (req, res) => {
   try {
     const { name, description, price } = req.body;
@@ -21,6 +24,7 @@ const addProduct = async (req, res) => {
   }
 };
 
+// Get All Products
 const getAllProducts = async (req, res) => {
   try {
     const products = await prisma.product.findMany({
@@ -33,6 +37,7 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+// Get Single Product
 const getProductById = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -48,6 +53,7 @@ const getProductById = async (req, res) => {
   }
 };
 
+// Update Product
 const updateProduct = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -75,6 +81,7 @@ const updateProduct = async (req, res) => {
   }
 };
 
+// Delete Product
 const deleteProduct = async (req, res) => {
   try {
     const id = Number(req.params.id);
