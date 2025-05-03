@@ -62,7 +62,7 @@ const ViewProductPage = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
         <Box sx={{ width: { xs: 300, sm: 500, md: 700 }, height: { xs: 300, sm: 500, md: 600 } }}>
           <ThreeDViewer
-            modelUrl={`${process.env.REACT_APP_API_BASE_URL}${product.modelUrl}`}
+            modelUrl={product.modelUrl}
             small={false}
             isSideView={true}
           />
