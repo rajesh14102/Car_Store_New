@@ -1,3 +1,4 @@
+// Corrected server.js
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // --- Static File Serving ---
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // For GLB model access
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- API Routes ---
 app.use('/api/products', productRoutes);
@@ -30,7 +31,7 @@ app.use((req, res, next) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// --- Global Error Handler (Optional) ---
+// --- Global Error Handler ---
 app.use((err, req, res, next) => {
   console.error('Unexpected Server Error:', err);
   res.status(500).json({ error: 'Internal Server Error' });
@@ -38,5 +39,5 @@ app.use((err, req, res, next) => {
 
 // --- Start Server ---
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`\uD83D\uDE80 Server running at http://localhost:${PORT}`);
 });
