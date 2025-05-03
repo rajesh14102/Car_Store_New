@@ -1,4 +1,13 @@
+const { v2: cloudinary } = require('cloudinary');
+const fs = require('fs');
 const prisma = require('../config/prismaClient');
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // ✅ Add Product
 const addProduct = async (req, res) => {
@@ -8,12 +17,19 @@ const addProduct = async (req, res) => {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: 'auto',
+      folder: 'products',
+    });
+    fs.unlinkSync(req.file.path); // Cleanup temp file
+
     const product = await prisma.product.create({
       data: {
         name,
         description,
         price: parseFloat(price),
-        modelUrl: req.file.path, // ✅ Cloudinary URL
+        modelUrl: result.secure_url,
       },
     });
 
@@ -63,7 +79,15 @@ const updateProduct = async (req, res) => {
     if (req.body.name) data.name = req.body.name;
     if (req.body.description) data.description = req.body.description;
     if (req.body.price) data.price = parseFloat(req.body.price);
-    if (req.file) data.modelUrl = req.file.path; // ✅ Cloudinary URL
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: 'auto',
+        folder: 'products',
+      });
+      fs.unlinkSync(req.file.path);
+      data.modelUrl = result.secure_url;
+    }
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: 'No fields provided for update' });
