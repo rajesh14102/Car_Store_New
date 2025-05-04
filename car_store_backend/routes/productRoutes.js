@@ -7,7 +7,7 @@ const {
   updateProduct,
   deleteProduct
 } = require('../controllers/productController');
-const upload = require('../middleware/uploadMiddleware');
+const upload = require('../middlewares/uploadMiddleware');
 
 router.post('/', upload.single('model'), addProduct);
 router.get('/', getAllProducts);
