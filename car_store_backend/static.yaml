@@ -1,0 +1,5 @@
+routes:
+  - type: static
+    name: uploads
+    path: /uploads/*
+    dir: uploads
