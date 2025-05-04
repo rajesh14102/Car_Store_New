@@ -1,25 +1,22 @@
 const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('cloudinary').v2;
+const path = require('path');
+const fs = require('fs');
 
-// 🔐 Cloudinary config using .env
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-});
+// Ensure /uploads directory exists
+const uploadDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
-// 📦 Multer storage setup with Cloudinary
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: '3d-car-store-models',
-    resource_type: 'raw', // required for .glb
-    format: async () => 'glb', // enforce .glb
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
   },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
 });
 
-// 📂 Multer uploader
 const upload = multer({ storage });
 
-module.exports = { upload };
+module.exports = upload;

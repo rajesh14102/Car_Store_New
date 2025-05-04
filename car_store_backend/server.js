@@ -1,44 +1,24 @@
-// Corrected server.js
+// ✅ server.js
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const featuredRoutes = require('./routes/featuredRoutes');
+const productRoutes = require('./routes/productRoutes');
 const path = require('path');
 
-const productRoutes = require('./routes/productRoutes');
-const featuredRoutes = require('./routes/featuredRoutes');
-
+const app = express();
 dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// --- Global Middlewares ---
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- Static File Serving ---
+// ✅ Serve uploads folder statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// --- API Routes ---
-app.use('/api/products', productRoutes);
+// Routes
 app.use('/api/featured', featuredRoutes);
+app.use('/api/products', productRoutes);
 
-// --- 404 Handling ---
-app.use((req, res, next) => {
-  res.status(404).json({ error: 'Route not found' });
-});
-
-// --- Global Error Handler ---
-app.use((err, req, res, next) => {
-  console.error('Unexpected Server Error:', err);
-  res.status(500).json({ error: 'Internal Server Error' });
-});
-
-// --- Start Server ---
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on 0.0.0.0:${PORT}`);
-});
-
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

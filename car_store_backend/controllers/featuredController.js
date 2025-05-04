@@ -1,50 +1,25 @@
-const { v2: cloudinary } = require('cloudinary');
-const fs = require('fs');
 const prisma = require('../config/prismaClient');
+const path = require('path');
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-});
-
-// ✅ Upload Featured Car
 const uploadFeaturedCar = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-    // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: 'auto',
-      folder: 'featured-cars',
-    });
+    const modelUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
 
-    // Remove temp file
-    fs.unlinkSync(req.file.path);
-
-    // Remove old featured entry
     await prisma.featuredCar.deleteMany();
+    await prisma.featuredCar.create({ data: { modelUrl } });
 
-    // Save Cloudinary URL
-    await prisma.featuredCar.create({
-      data: { modelUrl: result.secure_url },
-    });
-
-    res.json({ message: 'Featured car uploaded', url: result.secure_url });
+    res.json({ message: 'Featured car uploaded successfully', modelUrl });
   } catch (error) {
     console.error('Upload error:', error);
     res.status(500).json({ error: 'Failed to upload featured car' });
   }
 };
 
-// ✅ Get Featured Car
 const getFeaturedCar = async (req, res) => {
   try {
-    const featured = await prisma.featuredCar.findFirst({
-      orderBy: { uploadedAt: 'desc' },
-    });
-
+    const featured = await prisma.featuredCar.findFirst({ orderBy: { uploadedAt: 'desc' } });
     res.json({ modelUrl: featured?.modelUrl || null });
   } catch (error) {
     console.error('Fetch error:', error);
@@ -52,7 +27,4 @@ const getFeaturedCar = async (req, res) => {
   }
 };
 
-module.exports = {
-  uploadFeaturedCar,
-  getFeaturedCar,
-};
+module.exports = { uploadFeaturedCar, getFeaturedCar };
