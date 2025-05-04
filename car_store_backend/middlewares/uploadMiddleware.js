@@ -1,27 +1,27 @@
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+import multer from 'multer';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
 
-// Choose upload directory depending on environment
-const uploadPath = process.env.ON_RENDER
-  ? '/mnt/data/uploads'
-  : path.join(__dirname, '..', 'uploads');
+const isRender = process.env.ON_RENDER === 'true';
 
-// Ensure folder exists
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
+const uploadDir = isRender
+  ? '/mnt/data/uploads'  // ✅ For Render (no mkdir needed)
+  : path.join('uploads'); // ✅ Local
+
+// ✅ Ensure local directory only (Render fails on mkdirSync!)
+if (!isRender && !fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, uploadPath);
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + file.originalname;
-    cb(null, uniqueSuffix);
+    const ext = path.extname(file.originalname);
+    cb(null, uuidv4() + ext);
   },
 });
 
-const upload = multer({ storage });
-
-module.exports = upload;
+export const upload = multer({ storage });
