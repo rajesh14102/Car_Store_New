@@ -12,7 +12,7 @@ export const getProducts = async () => {
   }
 };
 
-// ✅ Get single product by ID
+// ✅ Get product by ID
 export const getProductById = async (id) => {
   try {
     return await axios.get(`${API_URL}/${id}`);
@@ -22,7 +22,7 @@ export const getProductById = async (id) => {
   }
 };
 
-// ✅ Add new product (multipart/form-data)
+// ✅ Add product
 export const addProduct = async (formData) => {
   try {
     return await axios.post(API_URL, formData, {
@@ -34,7 +34,7 @@ export const addProduct = async (formData) => {
   }
 };
 
-// ✅ Update existing product
+// ✅ Update product
 export const updateProduct = async (id, formData) => {
   try {
     return await axios.put(`${API_URL}/${id}`, formData, {
