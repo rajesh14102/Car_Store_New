@@ -1,48 +1,29 @@
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-import dotenv from 'dotenv';
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-dotenv.config();
-
-// 📁 Use /mnt/data/uploads in Render, fallback to ./uploads locally
-const isOnRender = process.env.ON_RENDER === 'true';
-const uploadDir = isOnRender
+// Determine correct directory
+const uploadDir = process.env.ON_RENDER
   ? '/mnt/data/uploads'
-  : path.join(process.cwd(), 'uploads');
+  : path.join(__dirname, '..', 'uploads');
 
-// ✅ Ensure upload directory exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// ✅ Ensure folder exists (ONLY LOCALLY)
+if (!process.env.ON_RENDER) {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
 }
 
-// 🛠️ Storage config
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const filename = `${uuidv4()}${ext}`;
-    cb(null, filename);
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
   }
 });
 
-// ✅ File type validation
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'model/gltf-binary') {
-    cb(null, true);
-  } else {
-    cb(new Error('Only .glb files are allowed!'), false);
-  }
-};
+const upload = multer({ storage });
 
-// 📦 Upload middleware
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
-});
-
-export default upload;
+module.exports = upload;
