@@ -2,16 +2,12 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Determine correct directory
-const uploadDir = process.env.ON_RENDER
-  ? '/mnt/data/uploads'
-  : path.join(__dirname, '..', 'uploads');
+// Set the uploads folder relative to the project root
+const uploadDir = path.join(process.cwd(), 'uploads');
 
-// ✅ Ensure folder exists (ONLY LOCALLY)
-if (!process.env.ON_RENDER) {
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
+// Ensure the folder exists (Render wipes folders on deploy, but we recreate it on boot)
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({

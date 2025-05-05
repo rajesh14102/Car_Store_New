@@ -13,13 +13,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Serve static files
-const uploadPath = process.env.ON_RENDER
-  ? '/mnt/data/uploads'
-  : path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadPath));
+// ✅ Serve uploaded files statically from /uploads
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
-// ✅ Routes
+// ✅ API routes
 app.use('/api/featured', featuredRoutes);
 app.use('/api/products', productRoutes);
 
