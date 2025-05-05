@@ -52,7 +52,7 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
       {/* 3D Model Viewer */}
       <Box sx={{ height: 300 }}>
         <ThreeDViewer
-          modelUrl={`${process.env.REACT_APP_API_BASE_URL}${product.modelUrl}`}
+          modelUrl={product.modelUrl}
           small={true}
           isSideView={true}
         />
