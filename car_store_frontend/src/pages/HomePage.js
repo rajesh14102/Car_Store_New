@@ -79,9 +79,10 @@ const HomePage = () => {
       {featuredModelUrl && (
         <Box sx={{ width: '100%', height: { xs: 400, sm: 600, md: 700, lg: 800 }, mb: 4 }}>
           <ThreeDViewer
-            modelUrl={featuredModelUrl}
+            modelUrl={`${process.env.REACT_APP_API_BASE_URL}${featuredModelUrl}`}
             small={false}
           />
+
         </Box>
       )}
 

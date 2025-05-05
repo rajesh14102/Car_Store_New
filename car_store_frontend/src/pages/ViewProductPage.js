@@ -66,6 +66,7 @@ const ViewProductPage = () => {
             small={false}
             isSideView={true}
           />
+
         </Box>
       </Box>
 

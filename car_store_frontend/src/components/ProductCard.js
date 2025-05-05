@@ -56,6 +56,7 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
           small={true}
           isSideView={true}
         />
+
       </Box>
 
       {/* Product Info */}
