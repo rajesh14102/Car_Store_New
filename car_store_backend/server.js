@@ -15,7 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // ✅ Serve uploaded files statically from /uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 // ✅ API routes
 app.use('/api/featured', featuredRoutes);
 app.use('/api/products', productRoutes);
