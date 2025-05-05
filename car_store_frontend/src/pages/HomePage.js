@@ -8,7 +8,7 @@ import { Box, Typography, TextField, Slider, Container, Grid } from '@mui/materi
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [searchName, setSearchName] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 10000000]);
+  const [priceRange, setPriceRange] = useState([0, 100000000]);
   const [featuredModelUrl, setFeaturedModelUrl] = useState(null);
 
   useEffect(() => {
