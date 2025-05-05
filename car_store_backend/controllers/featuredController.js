@@ -5,7 +5,7 @@ const uploadFeaturedCar = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-    const modelUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const modelUrl = `/uploads/${req.file.filename}`;
 
     await prisma.featuredCar.deleteMany();
     await prisma.featuredCar.create({ data: { modelUrl } });

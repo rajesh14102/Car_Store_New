@@ -6,7 +6,7 @@ const addProduct = async (req, res) => {
     if (!name || !description || !price || !req.file)
       return res.status(400).json({ error: 'All fields are required' });
 
-    const modelUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const modelUrl = `/uploads/${req.file.filename}`;
 
     const product = await prisma.product.create({
       data: {

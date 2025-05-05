@@ -2,10 +2,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Set the uploads folder relative to the project root
-const uploadDir = path.join(process.cwd(), 'uploads');
+const uploadDir = path.join(__dirname, '..', 'uploads');
 
-// Ensure the folder exists (Render wipes folders on deploy, but we recreate it on boot)
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
