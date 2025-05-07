@@ -141,20 +141,23 @@ const HomePage = () => {
       <Grid container spacing={3} justifyContent="center">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
+            <Grid item xs={12} sm={6} md={4} display="flex" justifyContent="center" key={product.id}>
               <ProductCard product={product} />
             </Grid>
           ))
         ) : (
-          <Typography
-            variant="h6"
-            textAlign="center"
-            sx={{ color: '#bd8c44', fontFamily: 'Tagesschrift, sans-serif' }}
-          >
-            No cars found matching your search.
-          </Typography>
+          <Grid item xs={12}>
+            <Typography
+              variant="h6"
+              textAlign="center"
+              sx={{ color: '#bd8c44', fontFamily: 'Tagesschrift, sans-serif' }}
+            >
+              No cars found matching your search.
+            </Typography>
+          </Grid>
         )}
       </Grid>
+
     </Container>
   );
 };
